@@ -1,0 +1,43 @@
+vapoursynth-colormatch
+======================
+
+This project is a reimplementation of a published method, not a port of code.
+
+Method credit
+-------------
+The rotated-marginal colour matching approach implemented here originates in
+"ColorMatch" (2015) by Menno Dreischor (DrDre), a MATLAB GUI tool for colour
+matching between images, discussed in:
+
+    Dr. Dre's Magical Color Matching Tool
+    https://originaltrilogy.com/topic/Color-matching-and-prediction-color-correction-tool-v13-released/id/18128/
+
+The MATLAB sources are archived at https://github.com/Miralia/dr-dre-colormatch
+and are not used, copied, or linked into this project. What is reused is the
+algorithm, which is not copyrightable subject matter:
+
+  * building a transform by matching per-axis marginals in a set of rotated
+    colour spaces, and accumulating the corrections in RGB;
+  * the observation that the first direction should use the [0, 1] range while
+    rotated directions use [-sqrt(3), +sqrt(3)].
+
+Everything else differs, deliberately and substantially. See the "What it does
+differently" table in README.md: pooled multi-frame sampling, linear-splatted
+CDFs instead of quantile knots with a smoothing spline, uniform-grid tables
+instead of binary search over knots, probability-band trimming, native float
+evaluation instead of a baked 33^3 LUT, and an independent (unpaired) reference
+side.
+
+API conventions
+---------------
+The Python wrapper's argument naming and validation style follow the conventions
+established by the surrounding VapourSynth ecosystem, in particular:
+
+  * vs-jetpack (MIT) -- the `.vsjet` package storage layout, `PackageStorage`,
+    and the `Backend.autoselect` shape;
+  * vs_colorfix (Apache-2.0, pifroggi) -- inline `TypeError`/`ValueError`
+    validation with the function name in the message, and the
+    `backend=` / `gpu_id=` / `cache folder` argument vocabulary.
+
+No code was copied from either project. These are naming and layout
+conventions, adopted so that the tool feels native to the ecosystem.

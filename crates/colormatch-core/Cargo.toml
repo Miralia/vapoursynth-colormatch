@@ -1,0 +1,27 @@
+[package]
+name = "colormatch-core"
+description = "Pure algorithm core for vapoursynth-colormatch: rotated-marginal sliced-OT colour matching"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[lib]
+name = "colormatch_core"
+path = "src/lib.rs"
+
+[features]
+default = []
+# Compiles the wgpu compute backend. Off by default so the core crate stays dependency-free.
+gpu = ["dep:wgpu", "dep:pollster", "dep:bytemuck"]
+
+[dependencies]
+wide = "0.7"
+wgpu = { version = "30", optional = true }
+pollster = { version = "0.4", optional = true }
+bytemuck = { version = "1", features = ["derive"], optional = true }
+
+[lints.rust]
+unsafe_code = "deny"

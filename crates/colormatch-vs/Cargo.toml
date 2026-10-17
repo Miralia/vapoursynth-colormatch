@@ -1,0 +1,24 @@
+[package]
+name = "colormatch-vs"
+description = "VapourSynth plugin: rotated-marginal sliced-OT colour matching (namespace `cm`)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[lib]
+# Determines the artifact name: libcolormatch.dylib / libcolormatch.so / colormatch.dll
+name = "colormatch"
+crate-type = ["cdylib"]
+path = "src/lib.rs"
+
+[features]
+default = ["gpu"]
+gpu = ["colormatch-core/gpu"]
+
+[dependencies]
+colormatch-core.workspace = true
+vapoursynth.workspace = true
+anyhow.workspace = true

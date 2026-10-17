@@ -1,0 +1,16 @@
+/target
+/python/build
+/python/dist
+/dist
+/python/src/*.egg-info
+# The model cache, wherever it lands. It resolves relative to the *script* directory, so a test run
+# or a script in a subdirectory puts one there too.
+.vsjet/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.cm
+*.cube
+*.clut
+.DS_Store

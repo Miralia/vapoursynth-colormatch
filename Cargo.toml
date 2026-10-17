@@ -1,0 +1,31 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/colormatch-core",
+    "crates/colormatch-vs",
+    "crates/colormatch-cli",
+]
+
+[workspace.package]
+version = "1.0.0"
+edition = "2024"
+rust-version = "1.88"
+license = "MIT"
+repository = "https://github.com/Miralia/vapoursynth-colormatch"
+authors = ["Miralia"]
+
+[workspace.dependencies]
+colormatch-core = { path = "crates/colormatch-core" }
+anyhow = "1"
+vapoursynth = "0.5.6"
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+# ld64/ld-prime emits a binary with a "mis-aligned LINKEDIT string pool" when the debug info is
+# stripped, and dlopen then refuses to load it. Keeping the symbols costs a couple of MB and is what
+# makes the artifact loadable; this was verified against all three LTO settings.
+strip = "none"
+debug = false

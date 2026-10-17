@@ -1,0 +1,80 @@
+[build-system]
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "vs-colormatch"
+dynamic = ["version"]
+description = "Rotated-marginal sliced-OT colour matching for VapourSynth: one model per reel, no bleed, no flicker"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Miralia" }]
+keywords = [
+    "vapoursynth",
+    "colour matching",
+    "color matching",
+    "colour transfer",
+    "color transfer",
+    "colour fix",
+    "optimal transport",
+    "lut",
+    "wgpu",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Rust",
+    "Topic :: Multimedia :: Video",
+    "Environment :: GPU",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Typing :: Typed",
+]
+
+# The plugin is a standalone VapourSynth module, not a Python extension, so the wrapper needs no
+# compiled dependency of its own. `vstools`/`jetpytools` are optional: when present we reuse
+# vs-jetpack's `PackageStorage` so the cache lands in exactly the same `.vsjet` tree.
+dependencies = ["vapoursynth>=74"]
+
+[project.optional-dependencies]
+jetpack = ["vsjetpack>=2.0"]
+
+[project.urls]
+Homepage = "https://github.com/Miralia/vapoursynth-colormatch"
+Repository = "https://github.com/Miralia/vapoursynth-colormatch"
+Issues = "https://github.com/Miralia/vapoursynth-colormatch/issues"
+
+# The version comes from `_version.py`, which `python/gen_version.py` generates from the Cargo
+# workspace version. That makes the Rust manifest the single source of truth and keeps the wheel
+# version, the plugin's reported version and `vs_colormatch.__version__` identical by construction.
+# It deliberately does *not* derive from a git tag: an untagged checkout would fail to build at all,
+# which is exactly what happened before this was changed, and a tag-derived version can disagree with
+# the manifest it ships alongside.
+[tool.hatch.version]
+path = "python/src/vs_colormatch/_version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["python/src/vs_colormatch"]
+
+# The Rust plugin is staged here by hatch_build.py and then placed at the path VapourSynth scans, so
+# that installing the wheel is all it takes for `core.cm` to exist.
+[tool.hatch.build.targets.wheel.force-include]
+"python/build/wheel/vapoursynth" = "vapoursynth"
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "hatch_build.py"]
+
+[tool.hatch.build.hooks.custom]
+path = "hatch_build.py"
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.pytest.ini_options]
+testpaths = ["../tests/python"]
+pythonpath = ["src"]

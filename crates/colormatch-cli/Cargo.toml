@@ -1,0 +1,17 @@
+[package]
+name = "colormatch-cli"
+description = "Command-line front end for vapoursynth-colormatch (no VapourSynth required)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[[bin]]
+name = "colormatch"
+path = "src/main.rs"
+
+[dependencies]
+colormatch-core.workspace = true
+anyhow.workspace = true
